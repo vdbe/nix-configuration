@@ -11,8 +11,6 @@ in
     ./..
   ];
 
-
-
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
   # when a new Home Manager release introduces backwards
@@ -28,12 +26,13 @@ in
   modules = {
     shell = {
       bash.enable = true;
+      exa.enable = true;
       fish.enable = true;
       git.enable = true;
       gpg.enable = true;
-      exa.enable = true;
       htop.enable = true;
       starship.enable = true;
+      tmux.enable = true;
     };
   };
 
