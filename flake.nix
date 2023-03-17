@@ -7,34 +7,51 @@
       #nixpkgs.url = "nixpkgs/nixos-unstable"; # primary nixpkgs
       nixpkgs.url = "nixpkgs/nixos-22.11"; # primary nixpkgs
       nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable"; # for packages on the edge
-      flake-utils.url = "github:numtide/flake-utils";
+      utils.url = "github:numtide/flake-utils";
+
+      flake-compat = {
+        url = "github:edolstra/flake-compat";
+        flake = false;
+      };
 
       deploy-rs = {
-        #inputs.nixpkgs.follows = "nixpkgs";
         url = "github:serokell/deploy-rs";
+        inputs = {
+          nixpkgs.follows = "nixpkgs-unstable";
+          utils.follows = "utils";
+          flake-compat.follows = "flake-compat";
+        };
       };
 
       home-manager = {
-        inputs.nixpkgs.follows = "nixpkgs";
         url = "github:nix-community/home-manager";
+        inputs = {
+          nixpkgs.follows = "nixpkgs";
+          utils.follows = "utils";
+        };
       };
 
       devenv = {
         url = "github:cachix/devenv";
-        inputs.nixpkgs.follows = "nixpkgs";
-        #inputs.flake-compat.follows = "flake-compat";
+        inputs = {
+          nixpkgs.follows = "nixpkgs-unstable";
+          flake-compat.follows = "flake-compat";
+        };
       };
 
       sops-nix = {
         url = "github:Mic92/sops-nix";
-        inputs.nixpkgs.follows = "nixpkgs";
+        inputs = {
+          nixpkgs.follows = "nixpkgs-unstable";
+          nixpkgs-stable.follows = "nixpkgs";
+        };
       };
 
       # Extras
       nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     };
 
-  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, flake-utils, home-manager, devenv, deploy-rs, ... }:
+  outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, utils, home-manager, devenv, deploy-rs, ... }:
     let
       inherit (lib.my) mapModules mapModulesRec mapHosts mapUsers genAttrs;
 
@@ -53,7 +70,7 @@
         overlays = extraOverlays ++ (lib.attrValues self.overlays);
       };
 
-      inherit (flake-utils.lib) filterPackages;
+      inherit (utils.lib) filterPackages;
 
       pkgs = forAllSystems (system: mkPkgs system nixpkgs [ ]);
       pkgs' = forAllSystems (system: mkPkgs system nixpkgs-unstable [ ]);
