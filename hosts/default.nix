@@ -11,6 +11,10 @@ with lib.my;
     nix.enable = true;
   };
 
+  programs = {
+    command-not-found.enable = false;
+  };
+
   boot = {
     tmpOnTmpfs = mkDefault true;
     loader = {
@@ -41,7 +45,6 @@ with lib.my;
       };
     };
   };
-
 
   system = {
     configurationRevision = with inputs; mkIf (self ? rev) self.rev;
