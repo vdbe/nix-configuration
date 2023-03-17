@@ -1,0 +1,12 @@
+keys:
+  - &admin c5cd97e60f8f93e7b6e7309d8ef5908be01ec60c
+  - &system_nixos01 age1ua5syascg44cznulxh7jyqddwf079yqkngp9jyawn3rafdsfuy7slnay3y
+  - &system_nixos02 age10gcmdw04ecc7q9qxhavfcns2rure4tsvvhc5cqwwghh6985e443sk7n25w
+creation_rules:
+  - path_regex: secrets/default.sops.yaml$
+    key_groups:
+      - pgp:
+        - *admin
+        age:
+          - *system_nixos01
+          - *system_nixos02
