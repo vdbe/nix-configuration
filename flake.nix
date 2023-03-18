@@ -88,6 +88,7 @@
 
       overlays = {
         default = final: _prev: {
+          # NOTE: maybe replace `final.system` with `prev.stdenv.hostPlatform.system`
           unstable = pkgs'.${final.system};
           my = self.packages.${final.system};
         };
@@ -147,6 +148,22 @@
                 user = "root";
                 path = deploy-rs.lib.x86_64-linux.activate.nixos
                   self.nixosConfigurations.nixos01;
+              };
+              #user = {
+              #  user = "user";
+              #  path = deploy-rs.lib.x86_64-linux.activate.home-manager
+              #    self.homeConfigurations.user;
+              #};
+            };
+          };
+          aragog = {
+            hostname = "192.168.0.216";
+            sshUser = "user";
+            profiles = {
+              system = {
+                user = "root";
+                path = deploy-rs.lib.x86_64-linux.activate.nixos
+                  self.nixosConfigurations.aragog;
               };
               #user = {
               #  user = "user";

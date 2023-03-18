@@ -2,6 +2,7 @@ keys:
   - &admin c5cd97e60f8f93e7b6e7309d8ef5908be01ec60c
   - &system_nixos01 age1ua5syascg44cznulxh7jyqddwf079yqkngp9jyawn3rafdsfuy7slnay3y
   - &system_nixos02 age10gcmdw04ecc7q9qxhavfcns2rure4tsvvhc5cqwwghh6985e443sk7n25w
+  - &system_aragog age1p5kxkqjsaf9ltut7035ac43phxd5n8um8m22whw50muemg0ppu0sh0qu2a
 creation_rules:
   - path_regex: secrets/default.sops.yaml$
     key_groups:
@@ -10,3 +11,4 @@ creation_rules:
         age:
           - *system_nixos01
           - *system_nixos02
+          - *system_aragog
