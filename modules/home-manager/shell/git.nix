@@ -45,11 +45,9 @@ in
         };
       };
 
-      bash.shellAliases = shellAliases;
-      zsh.shellAliases = shellAliases;
       fish.shellAbbrs = shellAliases;
-      ion.shellAliases = shellAliases;
     };
+    home.shellAliases = shellAliases;
   };
 }
 

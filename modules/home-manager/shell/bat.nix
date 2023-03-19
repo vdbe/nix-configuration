@@ -6,7 +6,7 @@ let
 
   cfg = config.modules.shell.bat;
 
-  aliases = { } // optionalAttrs cfg.enableAliases {
+  shellAliases = { } // optionalAttrs cfg.enableAliases {
     cat = "bat -p";
   };
 in
@@ -37,12 +37,8 @@ in
       bat = {
         inherit (cfg) enable extraPackages;
       };
-
-      bash.shellAliases = aliases;
-      zsh.shellAliases = aliases;
-      fish.shellAliases = aliases;
-      ion.shellAliases = aliases;
     };
+    home.shellAliases = shellAliases;
   };
 }
 
