@@ -23,6 +23,7 @@
     services = {
       ssh.enable = true;
     };
+    shell.fish.enable = true;
     desktop.hyprland.enable = true;
   };
 
