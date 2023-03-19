@@ -27,6 +27,7 @@ in
     shell = {
       bash.enable = true;
       exa.enable = true;
+      bat.enable = true;
       fish.enable = true;
       git.enable = true;
       gpg.enable = true;

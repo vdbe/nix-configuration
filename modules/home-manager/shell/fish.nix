@@ -11,10 +11,13 @@ in
     enable = mkBoolOpt false;
   };
 
-
   config = mkIf cfg.enable {
     programs.fish = {
       enable = true;
+      interactiveShellInit = ''
+        # Disable greeting message
+        set --universal fish_greeting
+      '';
     };
   };
 }

@@ -47,8 +47,14 @@
         };
       };
 
+      hyprland = {
+        url = "github:hyprwm/Hyprland";
+        inputs.nixpkgs.follows = "nixpkgs-unstable";
+      };
+
       # Extras
       nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, utils, home-manager, devenv, deploy-rs, ... }:

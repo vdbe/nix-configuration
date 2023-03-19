@@ -16,7 +16,6 @@
       inputs.nixos-hardware.nixosModules.common-pc-laptop-acpi_call
 
       inputs.home-manager.nixosModules.home-manager
-
     ];
 
   modules = {
@@ -24,6 +23,7 @@
     services = {
       ssh.enable = true;
     };
+    desktop.hyprland.enable = true;
   };
 
   sops.secrets.hashed_password.neededForUsers = true;
@@ -32,11 +32,14 @@
     networkmanager.enable = true;
   };
 
+  environment.systemPackages = with pkgs; [
+  ];
+
   users.users.user = {
     isNormalUser = true;
     passwordFile = config.sops.secrets.hashed_password.path;
     shell = pkgs.fish;
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "networkmanager" "video" ]; # Enable ‘sudo’ for the user.
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBB774/7KJ/Y5k9jVF8YACJiyPKzU4PZs3brXbnMHtmq user@buckbeak"
     ];
@@ -59,11 +62,11 @@
     }
   ];
 
-
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
-    users.user = ./../../users/user;
-    extraSpecialArgs = { inherit lib inputs system pkgs; };
+    users.user = ./../../users + "/user@${config.networking.hostName}";
+    extraSpecialArgs = { inherit lib inputs system pkgs; system-modules = config.modules; };
   };
 }
+
