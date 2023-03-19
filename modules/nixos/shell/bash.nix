@@ -4,15 +4,15 @@ let
   inherit (lib) mkIf;
   inherit (lib.my) mkBoolOpt;
 
-  cfg = config.modules.shell.fish;
+  cfg = config.modules.shell.bash;
 in
 {
-  options.modules.shell.fish = {
+  options.modules.shell.bash = {
     enable = mkBoolOpt false;
   };
 
   config = mkIf cfg.enable {
-    programs.fish = {
+    programs.bash = {
       enable = true;
     };
   };

@@ -11,6 +11,10 @@
         firefox.enable = true;
       };
     };
+    shell = {
+      bitwarden-cli.enable = true;
+    };
+    yubikey.enable = true;
   };
 
   # Environment
