@@ -22,6 +22,7 @@
     sops.enable = true;
     services = {
       ssh.enable = true;
+      fail2ban.enable = true;
     };
     shell.fish.enable = true;
     desktop.hyprland.enable = true;

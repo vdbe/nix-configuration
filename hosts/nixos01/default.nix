@@ -11,6 +11,7 @@
     sops.enable = true;
     services = {
       ssh.enable = true;
+      fail2ban.enable = true;
     };
   };
 
