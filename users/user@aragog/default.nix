@@ -18,10 +18,6 @@
   };
 
   # Environment
-  xdg = {
-    enable = true;
-    userDirs.enable = true;
-  };
 
   #programs.alacritty = {
   #  enable = true;

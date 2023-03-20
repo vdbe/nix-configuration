@@ -40,6 +40,16 @@ in
       };
     };
 
+    xdg = {
+      enable = true;
+      mime.enable = true;
+      mimeApps.enable = true;
+      userDirs = {
+        enable = true;
+        createDirectories = true;
+      };
+    };
+
     home.packages = with pkgs;
       [
         hyprpaper
