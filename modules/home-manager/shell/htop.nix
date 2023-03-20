@@ -21,6 +21,8 @@ in
           show_program_path = false;
           show_thread_names = true;
           update_process_names = false;
+          hide_kernel_threads = true;
+          hide_userland_threads = true;
 
           # Show the CPU frequency, temperature usage percentages in the CPU bars.
           show_cpu_frequency = true;
