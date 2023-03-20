@@ -48,8 +48,8 @@
       };
 
       hyprland = {
-        url = "github:hyprwm/Hyprland";
-        inputs.nixpkgs.follows = "nixpkgs-unstable";
+        url = "github:hyprwm/Hyprland/v0.23.0beta";
+        #inputs.nixpkgs.follows = "nixpkgs-unstable";
       };
 
       # Extras
@@ -91,6 +91,8 @@
     in
     {
       lib = lib.my;
+
+      inherit inputs;
 
       overlays = {
         default = final: _prev: {
@@ -162,22 +164,22 @@
               #};
             };
           };
-          aragog = {
-            hostname = "192.168.0.216";
-            sshUser = "user";
-            profiles = {
-              system = {
-                user = "root";
-                path = deploy-rs.lib.x86_64-linux.activate.nixos
-                  self.nixosConfigurations.aragog;
-              };
-              #user = {
-              #  user = "user";
-              #  path = deploy-rs.lib.x86_64-linux.activate.home-manager
-              #    self.homeConfigurations.user;
-              #};
-            };
-          };
+          #aragog = {
+          #  hostname = "192.168.0.216";
+          #  sshUser = "user";
+          #  profiles = {
+          #    system = {
+          #      user = "root";
+          #      path = deploy-rs.lib.x86_64-linux.activate.nixos
+          #        self.nixosConfigurations.aragog;
+          #    };
+          #    #user = {
+          #    #  user = "user";
+          #    #  path = deploy-rs.lib.x86_64-linux.activate.home-manager
+          #    #    self.homeConfigurations.user;
+          #    #};
+          #  };
+          #};
         };
         #magicRollback = false;
         #autoRollback = false;

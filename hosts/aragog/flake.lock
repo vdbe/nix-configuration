@@ -3,12 +3,15 @@
     "deploy-rs": {
       "inputs": {
         "flake-compat": [
+          "nix-configuration",
           "flake-compat"
         ],
         "nixpkgs": [
+          "nix-configuration",
           "nixpkgs-unstable"
         ],
         "utils": [
+          "nix-configuration",
           "utils"
         ]
       },
@@ -29,10 +32,12 @@
     "devenv": {
       "inputs": {
         "flake-compat": [
+          "nix-configuration",
           "flake-compat"
         ],
         "nix": "nix",
         "nixpkgs": [
+          "nix-configuration",
           "nixpkgs-unstable"
         ],
         "pre-commit-hooks": "pre-commit-hooks"
@@ -85,6 +90,7 @@
     "gitignore": {
       "inputs": {
         "nixpkgs": [
+          "nix-configuration",
           "devenv",
           "pre-commit-hooks",
           "nixpkgs"
@@ -107,9 +113,11 @@
     "home-manager": {
       "inputs": {
         "nixpkgs": [
+          "nix-configuration",
           "nixpkgs"
         ],
         "utils": [
+          "nix-configuration",
           "utils"
         ]
       },
@@ -152,6 +160,7 @@
     "hyprland-protocols": {
       "inputs": {
         "nixpkgs": [
+          "nix-configuration",
           "hyprland",
           "nixpkgs"
         ]
@@ -190,6 +199,7 @@
       "inputs": {
         "lowdown-src": "lowdown-src",
         "nixpkgs": [
+          "nix-configuration",
           "devenv",
           "nixpkgs"
         ],
@@ -208,6 +218,34 @@
         "ref": "relaxed-flakes",
         "repo": "nix",
         "type": "github"
+      }
+    },
+    "nix-configuration": {
+      "inputs": {
+        "deploy-rs": "deploy-rs",
+        "devenv": "devenv",
+        "flake-compat": "flake-compat",
+        "home-manager": "home-manager",
+        "hyprland": "hyprland",
+        "nixos-hardware": "nixos-hardware",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-unstable": [
+          "nixpkgs-unstable"
+        ],
+        "sops-nix": "sops-nix",
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 0,
+        "narHash": "sha256-hSpUU1rpNdDUvIHLV4jIFYKnK0ilnVxJfmJxW9UWeQM=",
+        "path": "/nix/store/w4yq3lkil9407hk00qr3py675bn4f7r2-source",
+        "type": "path"
+      },
+      "original": {
+        "path": "/nix/store/w4yq3lkil9407hk00qr3py675bn4f7r2-source",
+        "type": "path"
       }
     },
     "nixos-hardware": {
@@ -307,12 +345,14 @@
     "pre-commit-hooks": {
       "inputs": {
         "flake-compat": [
+          "nix-configuration",
           "devenv",
           "flake-compat"
         ],
         "flake-utils": "flake-utils",
         "gitignore": "gitignore",
         "nixpkgs": [
+          "nix-configuration",
           "devenv",
           "nixpkgs"
         ],
@@ -334,24 +374,19 @@
     },
     "root": {
       "inputs": {
-        "deploy-rs": "deploy-rs",
-        "devenv": "devenv",
-        "flake-compat": "flake-compat",
-        "home-manager": "home-manager",
-        "hyprland": "hyprland",
-        "nixos-hardware": "nixos-hardware",
+        "nix-configuration": "nix-configuration",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-unstable": "nixpkgs-unstable",
-        "sops-nix": "sops-nix",
-        "utils": "utils"
+        "nixpkgs-unstable": "nixpkgs-unstable"
       }
     },
     "sops-nix": {
       "inputs": {
         "nixpkgs": [
+          "nix-configuration",
           "nixpkgs-unstable"
         ],
         "nixpkgs-stable": [
+          "nix-configuration",
           "nixpkgs"
         ]
       },
@@ -405,10 +440,12 @@
     "xdph": {
       "inputs": {
         "hyprland-protocols": [
+          "nix-configuration",
           "hyprland",
           "hyprland-protocols"
         ],
         "nixpkgs": [
+          "nix-configuration",
           "hyprland",
           "nixpkgs"
         ]
