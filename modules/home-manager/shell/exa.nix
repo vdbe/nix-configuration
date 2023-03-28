@@ -1,7 +1,7 @@
 { config, options, lib, ... }:
 
 let
-  inherit (lib) mkIf mkEnableOption mkOption types;
+  inherit (lib) mkIf mkMerge mkEnableOption mkOption types;
 
   cfg = config.modules.shell.exa;
 in
@@ -43,11 +43,22 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    programs.exa = {
-      inherit (cfg) enable enableAliases extraOptions icons git;
-    };
-  };
+  config = mkIf cfg.enable (mkMerge [
+    {
+      programs.exa = {
+        inherit (cfg) enable enableAliases extraOptions icons git;
+      };
+    }
+
+    (mkIf cfg.enableAliases {
+
+      home.shellAliases = {
+        lp = "ll --octal-permissions";
+      };
+    })
+
+
+  ]);
 }
 
 
