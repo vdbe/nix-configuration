@@ -17,12 +17,14 @@ in
         in
         {
           enable_mouse = true;
+          hide_kernel_threads = true;
+          hide_userland_threads = true;
           highlight_base_name = true;
+          highlight_megabytes = true;
+          screen_tabs = true;
           show_program_path = false;
           show_thread_names = true;
           update_process_names = false;
-          hide_kernel_threads = true;
-          hide_userland_threads = true;
 
           # Show the CPU frequency, temperature usage percentages in the CPU bars.
           show_cpu_frequency = true;
@@ -57,6 +59,9 @@ in
             STARTTIME
             COMM
           ];
+
+          # TODO: Add I/O tab
+
         } // (leftMeters [
           #(bar "AllCPUs2")
           #(bar "CPU")
