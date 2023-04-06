@@ -1,62 +1,60 @@
 {
   description = "A very basic flake";
 
-  inputs =
-    {
-      # Core dependencies
-      #nixpkgs.url = "nixpkgs/nixos-unstable"; # primary nixpkgs
-      nixpkgs.url = "nixpkgs/nixos-22.11"; # primary nixpkgs
-      nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable"; # for packages on the edge
-      utils.url = "github:numtide/flake-utils";
+  inputs = {
+    # Core dependencies
+    #nixpkgs.url = "nixpkgs/nixos-unstable"; # primary nixpkgs
+    nixpkgs.url = "nixpkgs/nixos-22.11"; # primary nixpkgs
+    nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable"; # for packages on the edge
+    utils.url = "github:numtide/flake-utils";
 
-      flake-compat = {
-        url = "github:edolstra/flake-compat";
-        flake = false;
-      };
-
-      deploy-rs = {
-        url = "github:serokell/deploy-rs";
-        inputs = {
-          nixpkgs.follows = "nixpkgs-unstable";
-          utils.follows = "utils";
-          flake-compat.follows = "flake-compat";
-        };
-      };
-
-      home-manager = {
-        url = "github:nix-community/home-manager";
-        inputs = {
-          nixpkgs.follows = "nixpkgs";
-          utils.follows = "utils";
-        };
-      };
-
-      devenv = {
-        url = "github:cachix/devenv";
-        inputs = {
-          nixpkgs.follows = "nixpkgs-unstable";
-          flake-compat.follows = "flake-compat";
-        };
-      };
-
-      sops-nix = {
-        url = "github:Mic92/sops-nix";
-        inputs = {
-          nixpkgs.follows = "nixpkgs-unstable";
-          nixpkgs-stable.follows = "nixpkgs";
-        };
-      };
-
-      hyprland = {
-        url = "github:hyprwm/Hyprland/v0.23.0beta";
-        #inputs.nixpkgs.follows = "nixpkgs";
-        #inputs.nixpkgs.follows = "nixpkgs-unstable";
-      };
-
-      # Extras
-      nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-
+    flake-compat = {
+      url = "github:edolstra/flake-compat";
+      flake = false;
     };
+
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs-unstable";
+        utils.follows = "utils";
+        flake-compat.follows = "flake-compat";
+      };
+    };
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        utils.follows = "utils";
+      };
+    };
+
+    devenv = {
+      url = "github:cachix/devenv";
+      inputs = {
+        nixpkgs.follows = "nixpkgs-unstable";
+        flake-compat.follows = "flake-compat";
+      };
+    };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs-unstable";
+        nixpkgs-stable.follows = "nixpkgs";
+      };
+    };
+
+    hyprland = {
+      url = "github:hyprwm/Hyprland/v0.23.0beta";
+      #inputs.nixpkgs.follows = "nixpkgs";
+      #inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    # Extras
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+  };
 
   outputs = inputs@{ self, nixpkgs, nixpkgs-unstable, utils, home-manager, devenv, deploy-rs, ... }:
     let
@@ -185,8 +183,6 @@
         #magicRollback = false;
         #autoRollback = false;
       };
-
-
     };
 
   nixConfig = {

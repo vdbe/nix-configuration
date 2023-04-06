@@ -11,6 +11,7 @@ with lib.my;
         {
           nixpkgs.pkgs = pkgs."${system}";
           networking.hostName = mkDefault (removeSuffix ".nix" (baseNameOf path));
+          system.nixos.tags = [ inputs.self.shortRev or "dirty" ];
         }
         (filterAttrs (n: _v: !elem n [ "system" ]) attrs)
         ../hosts # /hosts/default.nix

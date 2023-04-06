@@ -41,11 +41,12 @@ in
     username = "${username}";
     homeDirectory = "/${if pkgs.stdenv.isDarwin then "Users" else "home"}/${config.home.username}";
 
-    packages = with pkgs; [
-      nload
-      my.fennel
-      unstable.neovim
-    ];
+    packages = with pkgs;
+      [
+        nload
+        my.fennel
+        unstable.neovim
+      ];
   };
 
 }

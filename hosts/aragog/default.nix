@@ -66,7 +66,7 @@
   ];
 
   home-manager = {
-    useUserPackages = true;
+    #useUserPackages = true;
     useGlobalPkgs = true;
     users.user = ./../../users + "/user@${config.networking.hostName}";
     extraSpecialArgs = { inherit lib inputs system pkgs; system-modules = config.modules; };
