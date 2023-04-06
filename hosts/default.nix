@@ -1,4 +1,4 @@
-{ lib, inputs, ... }:
+{ lib, inputs, pkgs, ... }:
 
 with builtins;
 with lib;
@@ -35,6 +35,13 @@ with lib.my;
     firewall.enable = mkDefault true;
     useDHCP = mkDefault false;
     dhcpcd.wait = "background";
+  };
+
+  environment = {
+    binsh = "${pkgs.dash}/bin/dash";
+    #localBinInPath = true;
+
+    systemPackages = with pkgs; [ dash ];
   };
 
   users = {

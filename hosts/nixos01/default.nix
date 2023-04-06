@@ -46,7 +46,6 @@
 
   services.xe-guest-utilities.enable = true;
 
-
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
