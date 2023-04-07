@@ -9,7 +9,7 @@ in
 {
   options.modules.desktop.waybar = {
     enable = mkBoolOpt false;
-    package = mkOpt types.package pkgs.htop;
+    package = mkOpt types.package pkgs.waybar;
   };
 
   config = mkIf cfg.enable {

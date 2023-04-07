@@ -37,6 +37,7 @@ in
           package = hyprland.packages."${pkgs.system}".waybar-hyprland;
         };
         rofi.enable = true;
+        dunst.enable = true;
       };
     };
 
