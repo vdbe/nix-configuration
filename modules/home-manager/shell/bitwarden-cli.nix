@@ -12,7 +12,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ bitwarden-cli ];
+    home.packages = with pkgs; [ unstable.bitwarden-cli ];
   };
 }
 

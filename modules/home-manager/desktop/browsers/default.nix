@@ -10,7 +10,7 @@ in
   options.modules.desktop.browsers = {
     default = mkOption {
       type = nullOr str;
-      default = null;
+      default = "firefox";
       description = "Default system browser";
       example = "firefox";
     };

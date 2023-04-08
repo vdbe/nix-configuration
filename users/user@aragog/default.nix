@@ -17,24 +17,23 @@
     yubikey.enable = true;
   };
 
-  # Environment
-
-  #programs.alacritty = {
-  #  enable = true;
-  #};
-
   home = {
     sessionVariables = {
       EDITOR = "nvim";
-      BROWSER = "firefox";
+      BROWSER = config.modules.desktop.browsers.default;
       TERMINAL = config.modules.desktop.terminals.default;
     };
 
     packages = with pkgs; [
       firefox
       nerdfonts
-      #nerdfonts.override # Only install FiraCode
-      #{ fonts = [ "FiraCode" ]; }
+      # nerdfonts.override # Only install FiraCode
+      # { fonts = [ "FiraCode" ]; }
+
+      discord
+      unstable.bitwarden
+      steam
+      my.maelstrom
     ];
   };
 
