@@ -1,19 +1,9 @@
-{ config, pkgs, ... }:
-
-{
-  imports = [
-    ./../user
-  ];
+{ config, pkgs, inputs, ... }: {
+  imports = [ ./../user ];
 
   modules = {
-    desktop = {
-      browsers = {
-        firefox.enable = true;
-      };
-    };
-    shell = {
-      bitwarden-cli.enable = true;
-    };
+    desktop = { browsers = { firefox.enable = true; }; };
+    shell = { bitwarden-cli.enable = true; };
     yubikey.enable = true;
   };
 
@@ -34,8 +24,7 @@
       unstable.bitwarden
       steam
       my.maelstrom
+      inputs.devenv.packages.x86_64-linux.devenv
     ];
   };
-
 }
-

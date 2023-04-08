@@ -1,15 +1,10 @@
-{ config, lib, pkgs, ... }:
-
+{ lib, pkgs, ... }:
 with builtins;
 with lib;
 with lib.my;
-let
-  username = "user";
-in
-{
-  imports = [
-    ./..
-  ];
+let username = "user";
+in {
+  imports = [ ./.. ];
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -39,15 +34,7 @@ in
 
   home = {
     username = "${username}";
-    homeDirectory = "/${if pkgs.stdenv.isDarwin then "Users" else "home"}/${config.home.username}";
 
-    packages = with pkgs;
-      [
-        nload
-        my.fennel
-        unstable.neovim
-      ];
+    packages = with pkgs; [ nload my.fennel unstable.neovim ];
   };
-
 }
-

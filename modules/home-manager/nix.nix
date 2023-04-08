@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   inherit (lib) mkIf lists;
   inherit (lib.my) mkBoolOpt;
@@ -9,18 +9,15 @@ in
 
   config = mkIf cfg.enable {
     nix = {
+      enable = true;
+
+      package = pkgs.nix;
+
       extraOptions = ''
         experimental-features = nix-command flakes
         min-free = ${toString (100 * 1024 * 1024)}
         max-free = ${toString (1024 * 1024 * 1024)}
       '';
-
-      gc = {
-        automatic = true;
-        persistent = true;
-        dates = "weekly";
-        options = "--delete-older-than 30d";
-      };
 
       settings = {
         trusted-users = [ "root" "@wheel" ];
