@@ -1,5 +1,5 @@
 { config, pkgs, inputs, ... }: {
-  imports = [ ./../user ];
+  imports = [ ./../user/home.nix ];
 
   modules = {
     desktop = { browsers = { firefox.enable = true; }; };

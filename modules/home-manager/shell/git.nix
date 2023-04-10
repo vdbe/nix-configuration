@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf optionalAttrs;
-  inherit (lib.my) mkBoolOpt;
+  inherit (lib.my.options) mkBoolOpt;
 
   cfg = config.modules.shell.git;
 

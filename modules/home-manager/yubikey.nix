@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf attrByPath lists;
-  inherit (lib.my) mkBoolOpt;
+  inherit (lib.my.options) mkBoolOpt;
   system-modules = attrByPath [ "system-modules" ] null attrs;
 
   yubikeyEnable = attrByPath [ "yubikey" "enable" ] false system-modules;

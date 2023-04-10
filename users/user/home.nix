@@ -1,10 +1,8 @@
-{ lib, pkgs, ... }:
-with builtins;
-with lib;
-with lib.my;
+{ pkgs, ... }:
 let username = "user";
-in {
-  imports = [ ./.. ];
+in
+{
+  imports = [ ./../home.nix ];
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage

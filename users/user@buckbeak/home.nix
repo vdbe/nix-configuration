@@ -1,8 +1,9 @@
 { pkgs, system, inputs, ... }:
 let username = "user";
-in {
+in
+{
   imports = [
-    #./../user
+    ../home.nix
   ];
 
   modules = {

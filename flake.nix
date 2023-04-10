@@ -68,7 +68,6 @@
     }:
     let
       inherit (nixpkgs.lib) attrValues genAttrs;
-      inherit (lib.my.nixos) mapHosts;
 
       supportedSystems = [
         "aarch64-linux"
@@ -93,7 +92,7 @@
             inherit inputs pkgs;
             lib = self;
           };
-        } // home-manager.lib);
+        } // inputs.home-manager.lib);
     in
     {
       inherit inputs;
@@ -102,18 +101,78 @@
 
       packages = forAllSystems (system: import ./packages { inherit lib; pkgs = pkgs."${system}"; });
 
+      devShells = forAllSystems (system: {
+        default = let _pkgs = pkgs."${system}"; in
+          devenv.lib.mkShell {
+            #inherit inputs;
+            inputs = { inherit nixpkgs; };
+            pkgs = _pkgs;
+            modules = [
+              {
+                packages = with _pkgs; [
+                  _pkgs.unstable.deploy-rs
+                  sops
+                ];
+
+                languages.nix.enable = true;
+
+                pre-commit.hooks = {
+                  deadnix.enable = true;
+                  nixpkgs-fmt.enable = true;
+                  statix.enable = true;
+                };
+              }
+            ];
+          };
+      });
+
       formatter = forAllSystems (system: pkgs."${system}".nixpkgs-fmt);
 
-      #nixosConfigurations = mapHosts ./hosts { };
-      nixosConfigurations = import ./hosts { inherit lib pkgs inputs; };
+      apps = forAllSystems (system:
+        {
+          default = {
+            type = "app";
+            program = "${pkgs.${system}.deploy-rs}/bin/deploy";
+          };
+        });
 
-      modules = { };
+      nixosConfigurations = import ./hosts { inherit lib pkgs inputs; };
+      homeConfigurations = import ./users { inherit lib pkgs inputs; };
 
       overlays = {
         default = final: _prev: {
           # NOTE: maybe replace `final.system` with `prev.stdenv.hostPlatform.system`
           unstable = pkgs'.${final.system};
           my = self.packages.${final.system};
+        };
+      } // (import ./overlays { inherit lib; });
+
+
+      deploy = {
+        nodes = {
+          nixos01 = {
+            hostname = "nixos01.lab.home.arpa";
+            sshUser = "user";
+            profiles = {
+              system = {
+                user = "root";
+                path = deploy-rs.lib.x86_64-linux.activate.nixos
+                  self.nixosConfigurations.nixos01;
+              };
+            };
+          };
+          buckbeak = {
+            hostname = "buckbeak";
+            sshUser = "user";
+            profiles = {
+              user = {
+                user = "user";
+                path = deploy-rs.lib.x86_64-linux.activate.home-manager
+                  self.homeConfigurations."user@buckbeak";
+              };
+            };
+          };
+
         };
       };
     };
@@ -133,12 +192,5 @@
       "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g="
       "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
     ];
-    #extra-trusted-public-keys = [ "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=" ];
-    #extra-substituters = [ "https://devenv.cachix.org" ];
   };
-
-  #nixConfig = {
-  #  extra-trusted-public-keys = "devenv.cachix.org-1:w1cLUi8dv3hnoSPGAuibQv+f9TZLr6cv/Hm9XgU50cw=";
-  #  extra-substituters = "https://devenv.cachix.org";
-  #};
 }

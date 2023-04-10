@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   inherit (lib) mkIf lists;
-  inherit (lib.my) mkBoolOpt;
+  inherit (lib.my.options) mkBoolOpt;
   cfg = config.modules.nix;
 in
 {

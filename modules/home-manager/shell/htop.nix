@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf;
-  inherit (lib.my) mkBoolOpt;
+  inherit (lib.my.options) mkBoolOpt;
 in
 {
   options.modules.shell.htop = { enable = mkBoolOpt false; };

@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf types;
-  inherit (lib.my) mkBoolOpt mkOpt;
+  inherit (lib.my.options) mkBoolOpt mkOpt;
 
   cfg = config.modules.desktop.waybar;
 in

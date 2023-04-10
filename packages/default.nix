@@ -4,6 +4,6 @@ let
   inherit (lib) filterAttrs;
   inherit (lib.my.import) importAllExcept;
 in
-filterAttrs (n: p: ! p ? meta || ! p.meta ? platforms || elem pkgs.system p.meta.platforms) (
-  mapAttrs (n: v: pkgs.callPackage v { }) (importAllExcept ./. [ "default.nix" ])
+filterAttrs (_n: p: ! p ? meta || ! p.meta ? platforms || elem pkgs.system p.meta.platforms) (
+  mapAttrs (_n: v: pkgs.callPackage v { }) (importAllExcept ./. [ "default.nix" ])
 )

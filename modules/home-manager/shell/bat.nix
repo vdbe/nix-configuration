@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf mkOption types optionalAttrs literalExpression;
-  inherit (lib.my) mkBoolOpt;
+  inherit (lib.my.options) mkBoolOpt;
 
   cfg = config.modules.shell.bat;
 

@@ -3,7 +3,7 @@
 let
   cfg = config.modules.desktop.browsers.firefox;
   inherit (lib) types mkIf mkMerge;
-  inherit (lib.my) mkBoolOpt;
+  inherit (lib.my.options) mkBoolOpt;
 in
 {
   options.modules.desktop.browsers.firefox = with types; {

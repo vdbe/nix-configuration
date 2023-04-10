@@ -1,5 +1,8 @@
 { config, lib, pkgs, inputs, system, ... }:
 
+let
+  inherit (lib.my.home-manager) mkExtraSpecialArgs;
+in
 {
   imports =
     [
@@ -49,10 +52,10 @@
   home-manager = {
     useUserPackages = true;
     useGlobalPkgs = true;
-    users.user = ./../../users/user;
+    users.user = ./../../users/user/home.nix;
     #users.user = {imports = [./../../users/user ];};
     #users.user = import ./../../users/user { inherit config lib inputs system pkgs; };
-    extraSpecialArgs = { inherit lib inputs system pkgs; };
+    extraSpecialArgs = mkExtraSpecialArgs { inherit config lib pkgs inputs system; };
   };
 
 }

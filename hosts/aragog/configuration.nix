@@ -4,6 +4,9 @@
 
 { config, lib, pkgs, inputs, system, ... }:
 
+let
+  inherit (lib.my.home-manager) mkExtraSpecialArgs;
+in
 {
   imports =
     [
@@ -70,8 +73,8 @@
   home-manager = {
     #useUserPackages = true;
     useGlobalPkgs = true;
-    users.user = ./../../users + "/user@${config.networking.hostName}";
-    extraSpecialArgs = { inherit lib inputs system pkgs; system-modules = config.modules; };
+    users.user = ./../../users + "/user@${config.networking.hostName}/home.nix";
+    extraSpecialArgs = mkExtraSpecialArgs { inherit config lib pkgs inputs system; };
   };
 }
 

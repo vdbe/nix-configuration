@@ -1,20 +1,13 @@
-attrs@{ lib, pkgs, inputs, ... }:
-
-with builtins;
-with lib;
-with lib.my;
+{ lib, pkgs, inputs, ... }:
 
 let
-  inherit (inputs) devenv;
-  inherit (lib.my.import) importAllExcept;
+  inherit (lib) mkIf mkDefault;
+  inherit (inputs) self;
 in
 {
   imports = [
     ../modules/nixos
-    #../modules/nixos/desktop
-    #../modules/nixos/services/pipewire.nix
   ];
-  #++ (mapModulesRec' (toString ../modules/nixos) import);
 
   modules = {
     nix.enable = true;
@@ -54,7 +47,7 @@ in
   };
 
   users = {
-    mutableUsers = true;
+    mutableUsers = false;
     users = {
       root = {
         #hashedPassword = "*";
@@ -63,7 +56,7 @@ in
   };
 
   system = {
-    configurationRevision = mkIf (inputs.self ? rev) self.rev;
+    configurationRevision = mkIf (self ? rev) self.rev;
     stateVersion = "22.11";
   };
 }

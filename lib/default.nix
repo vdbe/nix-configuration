@@ -1,7 +1,7 @@
 { lib, ... }:
 
 let
-  inherit (lib) makeExtensible foldr attrValues;
+  #inherit (lib) makeExtensible foldr attrValues;
 
   initialLib = import ./import {
     inherit lib;

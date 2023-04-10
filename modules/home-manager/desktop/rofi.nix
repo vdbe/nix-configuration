@@ -3,7 +3,7 @@
 let
   inherit (lib) mkIf mkOption getExe attrByPath;
   inherit (lib.types) package;
-  inherit (lib.my) mkBoolOpt;
+  inherit (lib.my.options) mkBoolOpt;
 
   envProto = attrByPath [ "system-modules" "desktop" "envProto" ] null attrs;
 
