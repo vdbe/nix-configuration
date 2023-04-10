@@ -1,8 +1,8 @@
 { config, lib, inputs, ... }:
-with builtins;
-with lib;
-with lib.my;
 let inherit (inputs) sops-nix;
+  inherit (lib) mkOption types mkIf;
+  inherit (lib.my.options) mkBoolOpt;
+
   cfg = config.modules.sops;
 in
 {

@@ -61,33 +61,34 @@
     inputs@{ self
     , nixpkgs
     , nixpkgs-unstable
-    , utils
     , home-manager
     , devenv
     , deploy-rs
     , ...
     }:
     let
-      inherit (lib.my) mapModules mapModulesRec mapHosts mapUsers genAttrs;
+      inherit (nixpkgs.lib) attrValues genAttrs;
+      inherit (lib.my.nixos) mapHosts;
 
-      supportedSystems =
-        [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+      supportedSystems = [
+        "aarch64-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      forAllSystems = genAttrs supportedSystems;
 
-      mkPkgs = system: pkgs: extraOverlays:
-        import pkgs {
-          inherit system;
-          config.allowUnfree = true;
-          overlays = extraOverlays ++ (lib.attrValues self.overlays);
-        };
-
-      inherit (utils.lib) filterPackages;
+      mkPkgs = system: pkgs: extraOverlays: import pkgs {
+        inherit system;
+        config.allowUnfree = true;
+        overlays = extraOverlays ++ (attrValues self.overlays);
+      };
 
       pkgs = forAllSystems (system: mkPkgs system nixpkgs [ ]);
       pkgs' = forAllSystems (system: mkPkgs system nixpkgs-unstable [ ]);
 
-      lib = nixpkgs.lib.extend (self: _super:
-        {
+      lib = nixpkgs.lib.extend
+        (self: _super: {
           my = import ./lib {
             inherit inputs pkgs;
             lib = self;
@@ -95,9 +96,18 @@
         } // home-manager.lib);
     in
     {
+      inherit inputs;
+
       lib = lib.my;
 
-      inherit inputs;
+      packages = forAllSystems (system: import ./packages { inherit lib; pkgs = pkgs."${system}"; });
+
+      formatter = forAllSystems (system: pkgs."${system}".nixpkgs-fmt);
+
+      #nixosConfigurations = mapHosts ./hosts { };
+      nixosConfigurations = import ./hosts { inherit lib pkgs inputs; };
+
+      modules = { };
 
       overlays = {
         default = final: _prev: {
@@ -105,97 +115,6 @@
           unstable = pkgs'.${final.system};
           my = self.packages.${final.system};
         };
-      } // mapModules ./overlays import;
-
-      #packages = forAllSystems (system: mapModules ./packages (p: pkgs."${system}".callPackage p { }));
-      packages = forAllSystems (system:
-        filterPackages system
-          (mapModules ./packages (p: pkgs."${system}".callPackage p { })));
-
-      devShells = forAllSystems (system: {
-        default =
-          let _pkgs = pkgs."${system}";
-          in
-          devenv.lib.mkShell {
-            #inherit inputs;
-            inputs = { inherit nixpkgs; };
-            pkgs = _pkgs;
-            modules = [{
-              packages = with _pkgs; [ _pkgs.unstable.deploy-rs sops ];
-
-              languages.nix.enable = true;
-
-              pre-commit.hooks = {
-                deadnix.enable = true;
-                statix.enable = true;
-                nixpkgs-fmt.enable = true;
-              };
-            }];
-          };
-      });
-
-      formatter = forAllSystems (system: pkgs."${system}".nixpkgs-fmt);
-
-      apps = forAllSystems (system: {
-        default = {
-          type = "app";
-          program = "${pkgs.${system}.deploy-rs}/bin/deploy";
-        };
-      });
-
-      modules = mapModulesRec ./modules import;
-
-      nixosConfigurations = mapHosts ./hosts { };
-      homeConfigurations = mapUsers ./users { };
-
-      deploy = {
-        nodes = {
-          nixos01 = {
-            hostname = "nixos01.lab.home.arpa";
-            sshUser = "user";
-            profiles = {
-              system = {
-                user = "root";
-                path = deploy-rs.lib.x86_64-linux.activate.nixos
-                  self.nixosConfigurations.nixos01;
-              };
-              #user = {
-              #  user = "user";
-              #  path = deploy-rs.lib.x86_64-linux.activate.home-manager
-              #    self.homeConfigurations.user;
-              #};
-            };
-          };
-          buckbeak = {
-            hostname = "127.0.0.1";
-            sshUser = "user";
-            profiles = {
-              user = {
-                user = "user";
-                path = deploy-rs.lib.x86_64-linux.activate.home-manager
-                  self.homeConfigurations."user@buckbeak";
-              };
-            };
-          };
-          #aragog = {
-          #  hostname = "norberta";
-          #  sshUser = "user";
-          #  profiles = {
-          #    system = {
-          #      user = "root";
-          #      path = deploy-rs.lib.x86_64-linux.activate.nixos
-          #        self.nixosConfigurations.aragog;
-          #    };
-          #    #user = {
-          #    #  user = "user";
-          #    #  path = deploy-rs.lib.x86_64-linux.activate.home-manager
-          #    #    self.homeConfigurations.user;
-          #    #};
-          #  };
-          #};
-        };
-        #magicRollback = false;
-        #autoRollback = false;
       };
     };
 

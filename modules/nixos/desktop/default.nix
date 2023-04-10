@@ -3,11 +3,14 @@
 let
   inherit (lib) mkIf mkMerge mkOption;
   inherit (lib.types) nullOr enum;
-  inherit (lib.my) countAttrs value;
+  inherit (lib.my.attrs) countAttrs;
+  inherit (lib.my.import) listImportablePathsExcept;
 
   cfg = config.modules.desktop;
 in
 {
+  imports = listImportablePathsExcept ./. [ "default.nix" ];
+
   options.modules.desktop = {
     envProto = mkOption {
       type = nullOr (enum [ "x11" "wayland" ]);
@@ -21,7 +24,7 @@ in
       {
         assertions = [
           {
-            assertion = (countAttrs (n: _v: n == "enable" && value) cfg) < 2;
+            assertion = (countAttrs (n: _v: n == "enable") cfg) < 2;
             message = "Prevent DE/WM > 1 from being enabled.";
           }
         ];

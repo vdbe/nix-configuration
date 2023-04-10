@@ -1,19 +1,17 @@
-{ inputs, lib, pkgs, ... }:
+{ lib, ... }:
 
 let
-  inherit (lib) makeExtensible attrValues foldr;
-  inherit (modules) mapModules;
+  inherit (lib) makeExtensible foldr attrValues;
 
-  modules = import ./modules.nix {
+  initialLib = import ./import {
     inherit lib;
-    self.attrs = import ./attrs.nix { inherit lib; self = { }; };
   };
 
-  mylib = makeExtensible (self:
-    with self; mapModules ./.
-      (file: import file { inherit self lib pkgs inputs; }));
+  mylib = initialLib.importAllExceptWithArg ./. [ "default.nix" ] { inherit lib; };
+  #mylib = makeExtensible (self: initialLib.importAllExceptWithArg ./. [ "default.nix" ] { inherit lib; });
 
 in
-mylib.extend
-  (_self: super:
-  foldr (a: b: a // b) { } (attrValues super))
+mylib
+#mylib.extend
+#  (_self: super:
+#    foldr (a: b: a // b) { } (attrValues super))

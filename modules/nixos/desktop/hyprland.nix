@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf;
-  inherit (lib.my) mkBoolOpt;
+  inherit (lib.my.options) mkBoolOpt;
 
   cfg = config.modules.desktop.hyprland;
 in
