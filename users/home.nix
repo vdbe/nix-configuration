@@ -1,8 +1,11 @@
-{ pkgs, config, ... }:
+{ lib, pkgs, config, ... }:
+let
+
+  inherit (lib.my.modules) mapModulesRec';
+in
 {
-  imports = [
-    ../modules/home-manager
-  ];
+  imports = [ ]
+    ++ (mapModulesRec' ../modules/home-manager import);
 
   home = {
     homeDirectory = "/${

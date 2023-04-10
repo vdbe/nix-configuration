@@ -239,23 +239,19 @@
         "home-manager": "home-manager",
         "hyprland": "hyprland",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": [
-          "nixpkgs"
-        ],
-        "nixpkgs-unstable": [
-          "nixpkgs-unstable"
-        ],
+        "nixpkgs": "nixpkgs_3",
+        "nixpkgs-unstable": "nixpkgs-unstable",
         "sops-nix": "sops-nix",
         "utils": "utils"
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-1CF32+tIgYtiHlq4ONP+hj375oHmr49wMZF2qhnJwkQ=",
-        "path": "/nix/store/3ly754n0b1xx7ajy8cl71ag0brfvpsqg-source",
+        "narHash": "sha256-7fjr7dOH6nXNq31EaAjv3zBV/ZgMWp+rHVT4+HmDezk=",
+        "path": "/nix/store/zv9pari191nwrsxx4mnrxyi9jg1zb3vj-source",
         "type": "path"
       },
       "original": {
-        "path": "/nix/store/3ly754n0b1xx7ajy8cl71ag0brfvpsqg-source",
+        "path": "/nix/store/zv9pari191nwrsxx4mnrxyi9jg1zb3vj-source",
         "type": "path"
       }
     },
@@ -401,9 +397,7 @@
     },
     "root": {
       "inputs": {
-        "nix-configuration": "nix-configuration",
-        "nixpkgs": "nixpkgs_3",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nix-configuration": "nix-configuration"
       }
     },
     "sops-nix": {

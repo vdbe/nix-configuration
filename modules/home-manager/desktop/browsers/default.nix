@@ -3,13 +3,10 @@
 let
   inherit (lib) mkIf mkOption;
   inherit (lib.types) nullOr str;
-  inherit (lib.my.import) listImportablePathsExcept;
 
   cfg = config.modules.desktop.browsers;
 in
 {
-  imports = listImportablePathsExcept ./. [ "default.nix" ];
-
   options.modules.desktop.browsers = {
     default = mkOption {
       type = nullOr str;

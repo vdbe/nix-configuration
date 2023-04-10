@@ -2,12 +2,12 @@
 
 let
   inherit (lib) mkIf mkDefault;
+  inherit (lib.my.modules) mapModulesRec';
   inherit (inputs) self;
 in
 {
-  imports = [
-    ../modules/nixos
-  ];
+  imports = [ ]
+    ++ (mapModulesRec' ../modules/nixos import);
 
   modules = {
     nix.enable = true;

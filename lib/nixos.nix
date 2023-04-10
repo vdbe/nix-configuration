@@ -1,9 +1,10 @@
 { lib, ... }:
 
 let
-  inherit (builtins) readDir dirOf listToAttrs pathExists attrNames;
-  inherit (lib) pathIsDirectory nixosSystem filterAttrs nameValuePair removeSuffix mkDefault;
-  inherit (lib.my.import) getAttrWithDefault;
+  inherit (builtins) dirOf pathExists readDir;
+  inherit (lib) pathIsDirectory nixosSystem filterAttrs removeSuffix mkDefault;
+  inherit (lib.my.attrs) getAttrWithDefault attrNames;
+  inherit (lib.my.modules) mapModulesRecOn;
 
   configurationFile = "configuration.nix";
   defaultConfiguration = ../hosts + "/${configurationFile}";
@@ -23,6 +24,9 @@ rec {
         ) "system"
         attrs;
     in
+    #{
+      #  inherit system hostName configurationDir configuration configurationPath;
+      #};
     nixosSystem
       {
         inherit system;
@@ -41,18 +45,18 @@ rec {
         #++ [ (import configuration) ];
       };
 
-
   listHost = dir:
     let
       conditionTable = n: {
         #regular = n == configurationFile;
         regular = false;
-        directory = pathExists (dir + "/${n}/${configurationFile}");
+        directory = !pathExists (dir + "/${n}/${configurationFile}")
+          && pathExists (dir + "/${n}/${configurationFile}");
       };
     in
     attrNames (filterAttrs (n: v: getAttrWithDefault false v (conditionTable n)) (readDir dir));
 
 
   mapHosts = dir: attrs:
-    listToAttrs (map (n: nameValuePair (removeSuffix ".nix" n) (mkHost (dir + "/${n}") attrs)) (listHost dir));
+    mapModulesRecOn dir configurationFile true (hostPath: mkHost hostPath attrs);
 }

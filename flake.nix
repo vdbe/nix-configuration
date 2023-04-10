@@ -68,6 +68,9 @@
     }:
     let
       inherit (nixpkgs.lib) attrValues genAttrs;
+      inherit (lib.my.modules) mapModulesRec mapModules;
+      inherit (lib.my.nixos) mapHosts;
+      inherit (lib.my.home-manager) mapUsers;
 
       supportedSystems = [
         "aarch64-linux"
@@ -92,14 +95,50 @@
             inherit inputs pkgs;
             lib = self;
           };
-        } // inputs.home-manager.lib);
+        });
     in
     {
       inherit inputs;
 
       lib = lib.my;
 
-      packages = forAllSystems (system: import ./packages { inherit lib; pkgs = pkgs."${system}"; });
+      packages = forAllSystems
+        (system:
+          let
+            inherit (builtins) elem mapAttrs;
+            inherit (lib) filterAttrs;
+
+            pkgs_system = pkgs."${system}";
+          in
+          filterAttrs (_n: p: ! p ? meta || ! p.meta ? platforms || elem pkgs_system.system p.meta.platforms)
+            (
+              mapAttrs (_n: v: pkgs_system.callPackage v { }) (mapModules ./packages import)
+            )
+        );
+
+      apps = forAllSystems (system:
+        {
+          default = {
+            type = "app";
+            program = "${pkgs.${system}.deploy-rs}/bin/deploy";
+          };
+        });
+
+      formatter = forAllSystems (system: pkgs."${system}".nixpkgs-fmt);
+
+      nixosModules = mapModulesRec ./modules/nixos import;
+      homeModules = mapModulesRec ./modules/home-manager import;
+
+      nixosConfigurations = mapHosts ./hosts { inherit lib pkgs inputs; };
+      homeConfigurations = mapUsers ./users { inherit lib pkgs inputs; };
+
+      overlays = {
+        default = final: _prev: {
+          # NOTE: maybe replace `final.system` with `prev.stdenv.hostPlatform.system`
+          unstable = pkgs'.${final.system};
+          my = self.packages.${final.system};
+        };
+      } // (mapModules ./overlays import);
 
       devShells = forAllSystems (system: {
         default = let _pkgs = pkgs."${system}"; in
@@ -125,27 +164,6 @@
             ];
           };
       });
-
-      formatter = forAllSystems (system: pkgs."${system}".nixpkgs-fmt);
-
-      apps = forAllSystems (system:
-        {
-          default = {
-            type = "app";
-            program = "${pkgs.${system}.deploy-rs}/bin/deploy";
-          };
-        });
-
-      nixosConfigurations = import ./hosts { inherit lib pkgs inputs; };
-      homeConfigurations = import ./users { inherit lib pkgs inputs; };
-
-      overlays = {
-        default = final: _prev: {
-          # NOTE: maybe replace `final.system` with `prev.stdenv.hostPlatform.system`
-          unstable = pkgs'.${final.system};
-          my = self.packages.${final.system};
-        };
-      } // (import ./overlays { inherit lib; });
 
 
       deploy = {

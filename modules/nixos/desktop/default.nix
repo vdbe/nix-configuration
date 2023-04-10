@@ -4,13 +4,10 @@ let
   inherit (lib) mkIf mkMerge mkOption;
   inherit (lib.types) nullOr enum;
   inherit (lib.my.attrs) countAttrs;
-  inherit (lib.my.import) listImportablePathsExcept;
 
   cfg = config.modules.desktop;
 in
 {
-  imports = listImportablePathsExcept ./. [ "default.nix" ];
-
   options.modules.desktop = {
     envProto = mkOption {
       type = nullOr (enum [ "x11" "wayland" ]);

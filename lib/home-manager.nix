@@ -1,9 +1,10 @@
 { lib, ... }:
 
 let
-  inherit (builtins) readDir dirOf listToAttrs pathExists attrNames;
-  inherit (lib) pathIsDirectory filterAttrs nameValuePair removeSuffix;
-  inherit (lib.my.import) getAttrWithDefault;
+  inherit (builtins) dirOf pathExists;
+  inherit (lib) pathIsDirectory;
+  inherit (lib.my.attrs) getAttrWithDefault;
+  inherit (lib.my.modules) mapModulesRecOn;
 
   configurationFile = "home.nix";
   #defaultConfiguration = ../users + "/${configurationFile}";
@@ -49,17 +50,6 @@ rec {
         #++ [ (import configuration) ];
       };
 
-  listHost = dir:
-    let
-      conditionTable = n: {
-        #regular = n == configurationFile;
-        regular = false;
-        directory = pathExists (dir + "/${n}/${configurationFile}");
-      };
-    in
-    attrNames (filterAttrs (n: v: getAttrWithDefault false v (conditionTable n)) (readDir dir));
-
-
   mapUsers = dir: attrs:
-    listToAttrs (map (n: nameValuePair (removeSuffix ".nix" n) (mkUser (dir + "/${n}") attrs)) (listHost dir));
+    mapModulesRecOn dir configurationFile true (hostPath: mkUser hostPath attrs);
 }

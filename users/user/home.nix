@@ -18,7 +18,7 @@ in
 
   modules = {
     shell = {
-      bash.enable = true;
+      #bash.enable = true;
       exa.enable = true;
       bat.enable = true;
       fish.enable = true;
