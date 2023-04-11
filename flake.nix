@@ -103,18 +103,7 @@
       lib = lib.my;
 
       packages = forAllSystems
-        (system:
-          let
-            inherit (builtins) elem mapAttrs;
-            inherit (lib) filterAttrs;
-
-            pkgs_system = pkgs."${system}";
-          in
-          filterAttrs (_n: p: ! p ? meta || ! p.meta ? platforms || elem pkgs_system.system p.meta.platforms)
-            (
-              mapAttrs (_n: v: pkgs_system.callPackage v { }) (mapModules ./packages import)
-            )
-        );
+        (system: import ./packages { pkgs = pkgs."${system}"; });
 
       apps = forAllSystems (system:
         {
