@@ -7,7 +7,12 @@ in
   ];
 
   modules = {
-    shell = { bitwarden-cli.enable = true; };
+    shell = {
+      bitwarden-cli.enable = true;
+      direnv.enable = true;
+      fish.enable = true;
+      starship.enable = true;
+    };
     nix.enable = true;
   };
 
